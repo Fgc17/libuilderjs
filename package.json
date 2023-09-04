@@ -1,0 +1,20 @@
+{
+  "name": "libuilderjs",
+  "version": "1.0.0",
+  "description": "A simple library builder",
+  "author": "Fernando Coelho",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "bin": {
+    "lib_builder": "bin/cmd.js"
+  },
+  "scripts": {
+    "test": "node bin/cmd.js ./test/"
+  },
+  "devDependencies": {
+    "@types/node": "18.16.12"
+  }
+}

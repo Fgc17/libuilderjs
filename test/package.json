@@ -1,0 +1,6 @@
+{
+    "_buildScripts": {
+        "files": "./src/",
+        "dist": "./index.js"
+    }
+}
