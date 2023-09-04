@@ -2,13 +2,13 @@
 
 ### LibBuilderJs
 
-While developing a library it can be real painful to write the index file manually, having to write code and then export export in the index file each time.
+While developing a library it can be real painful to write the index file manually, having to write code and then export the export in the index file each time.
 
 I wrote this script to automate the process of writing the index file, it recursively reads all files inside a given directory and generates an index file.
 
 ### Configuration
 
-The script should be configured using the "_lib-builder" key inside your library package.json, here is the possible options for it:
+The script should be configured using the "_lib-builder" key inside your library package.json, here are the possible options for it:
 
 ```ts
 // package.json
