@@ -16,27 +16,23 @@ const projectFolderPath = args[0];
 const packageJsonPath = join(projectFolderPath, "package.json");
 const packageJsonContent = readFileSync(packageJsonPath, "utf8");
 const packageJson = JSON.parse(packageJsonContent);
-const buildScripts = packageJson._buildScripts;
+const _liBuilderJs = packageJson._liBuilderJs;
 
-function buildTypes(projectFolderPath, buildScripts) {
-  // Clear any existing timeouts to prevent multiple calls
+function buildTypes(projectFolderPath, _liBuilderJs) {
   clearTimeout(timeout);
 
-  // Set a timeout to call the script after a delay, providing a debounce effect
   timeout = setTimeout(() => {
-    generateIndexFile(projectFolderPath, buildScripts);
-  }, 300); // 300 ms delay
+    generateIndexFile(projectFolderPath, _liBuilderJs);
+  }, 300); 
 }
 
-// Initial build
-buildTypes(projectFolderPath, buildScripts);
+buildTypes(projectFolderPath, _liBuilderJs);
 
-// Watch for changes in TypeScript files
-watch(buildScripts.files, { recursive: true }, (eventType, filename) => {
+watch(_liBuilderJs.src, { recursive: true }, (eventType, filename) => {
   if (
     filename &&
     (filename.endsWith(".ts") || filename.endsWith(".tsx")) &&
-    filename !== buildScripts.dist.split("/")[-1]
+    filename !== _liBuilderJs.dist.split("/")[-1]
   ) {
     console.log(`File ${filename} has been changed, rebuilding types...`);
     buildTypes();

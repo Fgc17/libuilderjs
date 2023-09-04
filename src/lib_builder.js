@@ -51,15 +51,15 @@ function generateExportContent(files, _relativePath) {
 
 export function generateIndexFile(projectFolderPath, buildScripts) {
   
-  const mandatoryBuildScriptsKeys = ['files', 'dist']
+  const mandatoryBuildScriptsKeys = ['src', 'index']
   
   if (!buildScripts || !mandatoryBuildScriptsKeys.every((key) => buildScripts[key])) {
     console.error('Missing or incomplete "_build-scripts" configuration in package.json');
     process.exit(1);
   }
 
-  const directoryPath = join(projectFolderPath, buildScripts.files);
-  const outputFilePath = join(projectFolderPath, buildScripts.dist);
+  const directoryPath = join(projectFolderPath, buildScripts.src);
+  const outputFilePath = join(projectFolderPath, buildScripts.index);
 
   const packageFiles = getFiles(directoryPath);
 

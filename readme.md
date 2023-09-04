@@ -1,6 +1,6 @@
 
 
-### LibBuilderJs
+### LiBuilderJs
 
 While developing a library it can be real painful to write the index file manually, having to write code and then export the export in the index file each time.
 
@@ -8,12 +8,12 @@ I wrote this script to automate the process of writing the index file, it recurs
 
 ### Configuration
 
-The script should be configured using the "_lib-builder" key inside your library package.json, here are the possible options for it:
+The script should be configured using the "_liBuilderJs" (just one B) key inside your library package.json, here are the possible options for it:
 
 ```ts
 // package.json
 {
-  "_lib-builder": {
+  "_liBuilderJs": {
     src: string, // path to the directory where your files are
     index: string, // path to the index file
     mostly: "private" | "public", // public by default
