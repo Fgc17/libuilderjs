@@ -9,6 +9,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "src",
+    "bin"
+  ],
   "type": "module",
   "bin": {
     "lib_builder": "bin/cmd.js"
@@ -17,6 +21,7 @@
     "example": "node bin/cmd.js ./examples/"
   },
   "devDependencies": {
+    "@changesets/cli": "2.26.2",
     "@types/node": "18.16.12"
   }
 }
