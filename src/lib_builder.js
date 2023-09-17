@@ -53,8 +53,13 @@ export function generateIndexFile(projectFolderPath, buildScripts) {
   
   const mandatoryBuildScriptsKeys = ['src', 'index']
   
-  if (!buildScripts || !mandatoryBuildScriptsKeys.every((key) => buildScripts[key])) {
-    console.error('Missing or incomplete "_build-scripts" configuration in package.json');
+  if(!buildScripts) {
+    console.error('Missing "_libuilderjs" key in package.json');
+    process.exit(1);
+  }
+
+  if (!mandatoryBuildScriptsKeys.every((key) => buildScripts[key])) {
+    console.error('Missing "src" or "index" key in "_libuilderjs" key in package.json');
     process.exit(1);
   }
 

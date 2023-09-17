@@ -29,12 +29,13 @@ function buildTypes(projectFolderPath, _liBuilderJs) {
 buildTypes(projectFolderPath, _liBuilderJs);
 
 watch(_liBuilderJs.src, { recursive: true }, (eventType, filename) => {
+  console.log('Start building types')
   if (
     filename &&
     (filename.endsWith(".ts") || filename.endsWith(".tsx")) &&
-    filename !== _liBuilderJs.dist.split("/")[-1]
+    filename !== _liBuilderJs.index.split("/")[-1]
   ) {
-    console.log(`File ${filename} has been changed, rebuilding types...`);
-    buildTypes();
+    console.log(`File ${filename} has been changed, rebuilding...`);
+    buildTypes(projectFolderPath, _liBuilderJs);
   }
 });
