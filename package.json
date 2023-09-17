@@ -1,8 +1,10 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "libuilderjs",
   "version": "1.0.0",
   "description": "A simple library builder",
   "author": "Fernando Coelho",
+  "repository": "https://github.com/Fgc17/libuilderjs",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -12,7 +14,7 @@
     "lib_builder": "bin/cmd.js"
   },
   "scripts": {
-    "test": "node bin/cmd.js ./test/"
+    "example": "node bin/cmd.js ./examples/"
   },
   "devDependencies": {
     "@types/node": "18.16.12"
