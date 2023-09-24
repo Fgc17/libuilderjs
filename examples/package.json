@@ -1,6 +1,5 @@
 {
-    "_buildScripts": {
-        "files": "./src/",
-        "dist": "./index.js"
+        "src": "./src/",
+        "index": "./index.ts",
     }
 }
