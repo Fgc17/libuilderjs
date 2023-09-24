@@ -1,74 +1,94 @@
-import { readdirSync, statSync, readFileSync, writeFileSync } from "fs";
-import { join, relative } from "path";
+import { readdirSync, statSync, readFileSync, writeFileSync, existsSync, unlinkSync } from "fs";
+import { basename, join, relative } from "path";
 
-const jsExtensions = [".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"]
+const jsExtensions = [".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"];
 
-function getFiles(dir, files_) {
-  files_ = files_ || [];
-  const files = readdirSync(dir);
-  for (const i in files) {
-    const name = join(dir, files[i]);
-    if (statSync(name).isDirectory()) {
-      getFiles(name, files_);
-    } else if (jsExtensions.some((ext) => name.endsWith(ext))) {
-      files_.push(name);
+function getFiles(dir, blacklist) {
+  const files = [];
+  const stack = [dir];
+
+  while (stack.length) {
+    const currentDir = stack.pop();
+    const entries = readdirSync(currentDir);
+
+    for (const entry of entries) {
+      const entryPath = join(currentDir, entry);
+      const isDirectory = statSync(entryPath).isDirectory();
+
+      if (isDirectory) {
+        stack.push(entryPath);
+      } else if (jsExtensions.some((ext) => entry.endsWith(ext))) {
+        if (!blacklist.includes(basename(entryPath))) {
+          files.push(entryPath);
+        }
+      }
     }
   }
-  return files_;
+
+  return files;
 }
 
 function generateExportContent(files, _relativePath) {
   const groupedExports = {};
-  files.forEach((file) => {
-    if (file.includes(".private.")) return;
+
+  for (const file of files) {
+    if (file.includes(".private.")) continue;
 
     const fileContent = readFileSync(file, "utf8");
     const exportMatches = fileContent.match(/export (type|class|interface|function|const)\s+(\w+)/g);
 
-    if (!exportMatches) return;
+    if (!exportMatches) continue;
 
-    const relativePath = relative(_relativePath, file)
-      .replace(/\\/g, "/")
-      .replace(/\.[^/.]+$/, "");
+    const relativePath = relative(_relativePath, file).replace(/\\/g, "/").replace(/\.[^/.]+$/, "");
 
     groupedExports[relativePath] = groupedExports[relativePath] || [];
-    exportMatches.forEach((match) => {
-      const exportName = match.split(" ")[2];
-      const exportKind = match.split(" ")[1];
+    for (const match of exportMatches) {
+      const [, exportKind, exportName] = match.split(" ");
       groupedExports[relativePath].push([exportKind, exportName]);
-    });
-  });
+    }
+  }
 
   let content = "";
   for (const relativePath in groupedExports) {
     content += `export { ${groupedExports[relativePath]
-      .map((type) => (type[0] != "type" ? type[1] : `type ${type[1]}`))
+      .map(([exportKind, exportName]) => (exportKind !== "type" ? exportName : `type ${exportName}`))
       .join(", ")} } from './${relativePath}';\n`;
   }
 
   return content;
 }
 
-export function generateIndexFile(projectFolderPath, buildScripts) {
-  
-  const mandatoryBuildScriptsKeys = ['src', 'index']
-  
-  if(!buildScripts) {
+export function generateIndexFile(projectFolderPath, liBuilderJs) {
+  const mandatoryliBuilderJsKeys = ['src', 'index'];
+
+  if (!liBuilderJs) {
     console.error('Missing "_libuilderjs" key in package.json');
     process.exit(1);
   }
 
-  if (!mandatoryBuildScriptsKeys.every((key) => buildScripts[key])) {
+  if (!mandatoryliBuilderJsKeys.every((key) => liBuilderJs[key])) {
     console.error('Missing "src" or "index" key in "_libuilderjs" key in package.json');
     process.exit(1);
   }
 
-  const directoryPath = join(projectFolderPath, buildScripts.src);
-  const outputFilePath = join(projectFolderPath, buildScripts.index);
+  const directoryPath = join(projectFolderPath, liBuilderJs.src);
+  const outputFilePath = join(projectFolderPath, liBuilderJs.index);
 
-  const packageFiles = getFiles(directoryPath);
+  if (existsSync(outputFilePath)) {
+    unlinkSync(outputFilePath);
+  }
 
-  const packageIndexContent = generateExportContent(packageFiles, join(outputFilePath, ".."));
+  const packageFiles = getFiles(directoryPath, [basename(liBuilderJs.additional_code)]);
+  let packageIndexContent = generateExportContent(packageFiles, join(outputFilePath, ".."));
+
+  if (liBuilderJs.additional_code) {
+    const additionalCodePath = join(projectFolderPath, liBuilderJs.additional_code);
+
+    if (existsSync(additionalCodePath)) {
+      const additionalCodeContent = readFileSync(additionalCodePath, 'utf8');
+      packageIndexContent = additionalCodeContent + '\n' + packageIndexContent;
+    }
+  }
 
   writeFileSync(outputFilePath, packageIndexContent, "utf8");
 }

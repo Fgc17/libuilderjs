@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
-import { join, basename, extname } from "path";
-import { watch, readFileSync } from "fs";
+import { join, basename } from "path";
+import {  readFileSync } from "fs";
 import { generateIndexFile } from "../src/lib_builder.js";
+import chokidar from 'chokidar';
+import debounce from 'lodash/debounce.js';
 
 let timeout;
 
@@ -30,25 +32,13 @@ buildTypes();
 
 const srcDir = join(projectFolderPath, _liBuilderJs.src)
 
-watch(srcDir, { recursive: true }, (eventType, filename) => {
-  const whiteList = [
-    '.jsx',
-    '.tsx',
-    '.ts',
-    '.js',
-    '.cjs',
-    '.mjs'
-  ];
+const indexAbsolutePath = join(projectFolderPath, _liBuilderJs.index)
 
-  const fileExtension = extname(filename);
-  
-  const baseFileName = basename(filename);
+const watcher = chokidar.watch(srcDir, { ignored: indexAbsolutePath });
 
-  const indexFileName = basename(_liBuilderJs.index)
+const debouncedBuildTypes = debounce(buildTypes, 300);
 
-  if (!filename || baseFileName === indexFileName || !whiteList.includes(fileExtension)) return;
-
+watcher.on('change', (filename) => {
   console.log(`File ${filename} has been changed, rebuilding...`);
-  
-  buildTypes();
+  debouncedBuildTypes();
 });

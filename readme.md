@@ -14,14 +14,23 @@ The script should be configured using the "_liBuilderJs" (just one B) key inside
 // package.json
 {
   "_liBuilderJs": {
-    src: string, // path to the directory where your files are
+    src: string, // script will watch files inside this directory
     index: string, // path to the index file
+    additional_code: string, // path to the additional code file
     mostly: "private" | "public", // public by default
   }
 }
 ```
 
+### Usage
+
+#### Mostly
+
 The `mostly` key is set to public by default, which means that all files under `src` will be exported in the index file, unless you add `.private` to the file name, in this case the file will not be exported. But if you set it to private, then all files will be private unless you add `.public` to the file name. This is useful when you want to export more files than you want to hide.
+
+#### Additional code
+
+The `additional_code` key is used to add additional code to the index file, for example, if you want to add a global import to all files, you can add it to the `additional_code` file and it will be added to the index file.
 
 ### Contributing
 

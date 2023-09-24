@@ -1,5 +1,7 @@
 {
+    "_liBuilderJs": {
         "src": "./src/",
-        "index": "./index.ts",
+        "index": "./src/index.ts",
+        "additional_code": "./src/additional_code.js"
     }
 }
