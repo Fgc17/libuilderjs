@@ -1,4 +1,4 @@
 
-export function BeutifulComponent() {
+export function BeautifulComponent() {
     return 'text because react is not installed'
 }
