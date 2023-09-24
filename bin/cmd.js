@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { join } from "path";
+import { join, basename, extname } from "path";
 import { watch, readFileSync } from "fs";
 import { generateIndexFile } from "../src/lib_builder.js";
 
@@ -18,7 +18,7 @@ const packageJsonContent = readFileSync(packageJsonPath, "utf8");
 const packageJson = JSON.parse(packageJsonContent);
 const _liBuilderJs = packageJson._liBuilderJs;
 
-function buildTypes(projectFolderPath, _liBuilderJs) {
+function buildTypes() {
   clearTimeout(timeout);
 
   timeout = setTimeout(() => {
@@ -26,16 +26,29 @@ function buildTypes(projectFolderPath, _liBuilderJs) {
   }, 300); 
 }
 
-buildTypes(projectFolderPath, _liBuilderJs);
+buildTypes();
 
-watch(_liBuilderJs.src, { recursive: true }, (eventType, filename) => {
-  console.log('Start building types')
-  if (
-    filename &&
-    (filename.endsWith(".ts") || filename.endsWith(".tsx")) &&
-    filename !== _liBuilderJs.index.split("/")[-1]
-  ) {
-    console.log(`File ${filename} has been changed, rebuilding...`);
-    buildTypes(projectFolderPath, _liBuilderJs);
-  }
+const srcDir = join(projectFolderPath, _liBuilderJs.src)
+
+watch(srcDir, { recursive: true }, (eventType, filename) => {
+  const whiteList = [
+    '.jsx',
+    '.tsx',
+    '.ts',
+    '.js',
+    '.cjs',
+    '.mjs'
+  ];
+
+  const fileExtension = extname(filename);
+  
+  const baseFileName = basename(filename);
+
+  const indexFileName = basename(_liBuilderJs.index)
+
+  if (!filename || baseFileName === indexFileName || !whiteList.includes(fileExtension)) return;
+
+  console.log(`File ${filename} has been changed, rebuilding...`);
+  
+  buildTypes();
 });
