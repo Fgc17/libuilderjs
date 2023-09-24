@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package",
-  "name": "libuilderjs",
+  "name": "@ferstack/libuilderjs",
   "version": "1.0.0",
   "description": "A simple library builder",
   "author": "Fernando Coelho",

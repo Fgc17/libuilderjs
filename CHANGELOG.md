@@ -1,4 +1,4 @@
-# libuilderjs
+# @ferstack/libuilderjs
 
 ## 1.0.0
 
