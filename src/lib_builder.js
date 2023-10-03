@@ -78,7 +78,11 @@ export function generateIndexFile(projectFolderPath, liBuilderJs) {
     unlinkSync(outputFilePath);
   }
 
-  const packageFiles = getFiles(directoryPath, [basename(liBuilderJs.additional_code)]);
+  let blackList = [
+    basename(liBuilderJs.additional_code || '')
+  ]
+
+  const packageFiles = getFiles(directoryPath, blackList);
   let packageIndexContent = generateExportContent(packageFiles, join(outputFilePath, ".."));
 
   if (liBuilderJs.additional_code) {
