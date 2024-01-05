@@ -1,5 +1,11 @@
 # @ferstack/libuilderjs
 
+## 3.0.0
+
+### Major Changes
+
+- eed3de2: Standardized command and keys, head out to examples for more information.
+
 ## 2.0.1
 
 ### Patch Changes
