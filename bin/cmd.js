@@ -18,7 +18,7 @@ const projectFolderPath = args[0];
 const packageJsonPath = join(projectFolderPath, "package.json");
 const packageJsonContent = readFileSync(packageJsonPath, "utf8");
 const packageJson = JSON.parse(packageJsonContent);
-const _liBuilderJs = packageJson._liBuilderJs;
+const _liBuilderJs = packageJson._libuilder;
 
 function buildTypes() {
   clearTimeout(timeout);

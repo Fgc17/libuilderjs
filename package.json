@@ -15,7 +15,7 @@
   ],
   "type": "module",
   "bin": {
-    "lib_builder": "bin/cmd.js"
+    "libuilder": "bin/cmd.js"
   },
   "scripts": {
     "example": "node bin/cmd.js ./examples/"

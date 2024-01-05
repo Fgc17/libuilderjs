@@ -1,5 +1,8 @@
 {
-    "_liBuilderJs": {
+    "scripts": {
+        "dev": "libuilder ./"
+    },
+    "_libuilder": {
         "src": "./src/",
         "index": "./src/index.ts",
         "additional_code": "./src/additional_code.js"
