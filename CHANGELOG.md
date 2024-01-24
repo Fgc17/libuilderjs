@@ -1,5 +1,11 @@
 # @ferstack/libuilderjs
 
+## 4.0.0
+
+### Major Changes
+
+- File tags and server/client files support
+
 ## 3.0.0
 
 ### Major Changes
