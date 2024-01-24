@@ -9,21 +9,32 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "files": [
     "src",
     "bin"
   ],
-  "type": "module",
   "bin": {
-    "libuilder": "bin/cmd.js"
+    "libuilder": "dist/cmd.js"
   },
   "scripts": {
-    "example": "node bin/cmd.js ./examples/"
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "example": "node dist/cmd.js ./examples/.libuilderrc.js"
+  },
+  "dependencies": {
+    "chokidar": "3.5.3",
+    "lodash": "4.17.21"
   },
   "devDependencies": {
-    "chokidar": "3.5.3",
-    "lodash": "4.17.21",
     "@changesets/cli": "2.26.2",
-    "@types/node": "18.16.12"
-  }
+    "@types/lodash": "^4.14.202",
+    "@types/node": "18.16.12",
+    "prettier": "^3.2.2",
+    "typescript": "5.3.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@8.14.1"
 }

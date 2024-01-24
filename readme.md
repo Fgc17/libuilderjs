@@ -1,5 +1,3 @@
-
-
 ### LiBuilderJs
 
 While developing a library it can be real painful to write the index file manually, having to write code and then export the export in the index file each time.
@@ -8,25 +6,29 @@ I wrote this script to automate the process of writing the index file, it recurs
 
 ### Configuration
 
-The script should be configured using the "_liBuilderJs" (just one B) key inside your library package.json, here are the possible options for it:
+The script should be configured under `.libuilderrc.js` file, here are the possible options for it:
 
 ```ts
-// package.json
-{
-  "_liBuilderJs": {
-    src: string, // script will watch files inside this directory
-    index: string, // path to the index file
-    additional_code: string, // path to the additional code file
-    mostly: "private" | "public", // public by default
-  }
-}
+// .libuilderrc.js
+
+/** @type {import('libuilderjs').Config} */
+const config = {
+  src: string, // will watch files inside this directory
+  dist: string, // will write the index file to this directory
+  additional_code?: string, // path to the additional code file
+  defaultTags?: "private" | "public", // public by default
+};
+
+export default config;
 ```
 
 ### Usage
 
 #### Mostly
 
-The `mostly` key is set to public by default, which means that all files under `src` will be exported in the index file, unless you add `.private` to the file name, in this case the file will not be exported. But if you set it to private, then all files will be private unless you add `.public` to the file name. This is useful when you want to export more files than you want to hide.
+The `mostly` key is set to public by default, which means that all files under `src` will be exported in the index file, unless you add `//private` to the file start, in this case the file will not be exported. But if you set it to private, then all files will be private unless you add `//public` to the file start.
+
+This is useful when you want to export more files than you want to hide.
 
 #### Additional code
 
